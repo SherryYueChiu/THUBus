@@ -1,3 +1,4 @@
+/** @type Date[] */
 var busTimeTable = [],
   busStopTable = [];
 var popTextTimer, popTextTimes = 50;
@@ -10,8 +11,9 @@ function pad(n, width, z = '0') {
 }
 
 $(function () {
-
-  //公車到站時間推估
+  /**
+   * 公車到站時間推估
+   */
   function busTrackUpdate() {
     const curTime = new Date();
     const curTimeHHMM = `${curTime.getHours()}:${pad(curTime.getMinutes(), 2)}`;
@@ -74,19 +76,19 @@ $(function () {
         else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 0;
       }
-      //假日路線（往二校）
+      // 假日路線（往二校）
       if (selectRoute == "4") {
         timeOffset -= 60000;
       }
       if (recentBusTime.getTime() + timeOffset >= curTime.getTime() - 1 * 60000) {
-        //5分鐘內到站
+        // 5分鐘內到站
         if (recentBusTime.getTime() + timeOffset <= curTime.getTime() + 4 * 60000) {
           html += `
 <a href="#" class="badge badge-warning">
 5分鐘內到站
 				</a>`;
         } else {
-          //最近一班車
+          // 最近一班車
           let time1 = new Date(recentBusTime.getTime() + timeOffset);
           html += `
 <a href="#" class="badge badge-success">
@@ -95,7 +97,7 @@ ${pad(time1.getHours(), 2)}:${pad(time1.getMinutes(), 2)}
         }
       }
       if (nextBusTime) {
-        //下一班車
+        // 下一班車
         let time2 = new Date(nextBusTime.getTime() + timeOffset);
         html += `
 <a href="#" class="badge badge-success">
@@ -106,7 +108,11 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
     });
   }
 
-  //轉譯站名
+  /**
+   * 轉譯站名
+   * @param {string} stopName - 原站名
+   * @returns {string} 轉譯後的站名
+   */
   function getStopName(stopName) {
     if (stopName.indexOf("科技大樓") != -1) {
       return "科技大樓（ST）";
@@ -130,20 +136,24 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
     return "？";
   }
 
+  /**
+   * 顯示路線結果
+   * @param {number} route - 路線編號
+   */
   function showRoute(route) {
     selectRoute = route;
     let url = `https://linebot.cc.paas.ithu.tw/v6/pages/cc_util_busroute_server.php?routeid=${route}`;
     $.get(`https://ziting.hostingerapp.com/readPage.php?URL=${url}`, function (data) {
       if (data.indexOf("不行駛") == -1) {
         $("#busRoute").html(data);
-        //讀出時間表
+        // 讀出時間表
         $("#busRoute>div:first>table td").each(function () {
           const timeHHMM = $(this).html().split(":");
           const dt = new Date();
           const time = new Date(`${dt.getFullYear()}/${dt.getMonth() + 1}/${dt.getDate()} ${timeHHMM[0]}:${timeHHMM[1]}:00`);
           busTimeTable.push(time);
         });
-        //讀出時間表
+        // 讀出時間表
         $("#busRoute>div:last>div>div").each(function () {
           busStopTable.push($(this).html());
         });
@@ -160,7 +170,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
         });
         $("#busTimeline").addClass("main-timeline").append(html);
       } else {
-        //本路線今日停駛
+        // 本路線今日停駛
         popTextTimer = setInterval(function () {
           popTextTimes--;
           if (popTextTimes >= 0) {
@@ -177,7 +187,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
     });
   }
 
-  //送出
+  // 送出
   $("#page1Submit").click(function () {
     $("#page1").fadeOut(200);
     $("#page2").fadeIn(200);
@@ -186,7 +196,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
 
   function init() {
     setInterval(function () {
-      //背景掃碼動畫
+      // 背景掃碼動畫
       $(".scannerImg").animate({
         "top": "0"
       }, 1500).animate({
@@ -194,7 +204,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
       }, 1500);
     }, 3000);
     setInterval(function () {
-      //公車動態更新
+      // 公車動態更新
       busTrackUpdate();
     }, 5000);
   }
@@ -202,5 +212,5 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
   init();
 });
 
-//register service worker
+// register service worker
 navigator.serviceWorker.register('service-worker.js', { scope: "." });
