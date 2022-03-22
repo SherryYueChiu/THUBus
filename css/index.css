@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: #ffccbc;
+  background-color: #83919f;
 }
 
 html,
@@ -26,7 +26,7 @@ body,
 }
 
 a:hover {
-  color: #ef9a9a;
+  color: #343a40;
 }
 
 .scannerImg {
@@ -58,9 +58,14 @@ a:hover {
   color: #b2dfdb;
 }
 
+.adArea {
+  background-color: #343a40;
+}
+
 #footer > span {
   font-size: medium;
   margin-left: -2em;
+  color: #343a40;
 }
 
 .floatingBtn {
@@ -89,6 +94,7 @@ a:hover {
   height: auto;
   opacity: 0.5;
   z-index: -1;
+  display: none;
 }
 
 #bgImg2 {
@@ -100,14 +106,15 @@ a:hover {
   height: auto;
   opacity: 0.5;
   z-index: -1;
+  display: none;
 }
 
 .bgColor1 {
-  background-color: #ef9a9a;
+  background-color: #343a40;
 }
 
 .color1 {
-  color: #ef9a9a;
+  color: #343a40;
 }
 
 .bgColor2 {
