@@ -8,8 +8,18 @@ $color5: #e8f5e9;
     height: 0px;
 }
 
+@font-face {
+    font-family: Iansui;
+    src: url(../Iansui0.91-Regular.ttf);
+}
+
+* {
+    font-family: Iansui;
+}
+
 body {
     background-color: #83919f;
+    font-family: Iansui;
 }
 
 html,
