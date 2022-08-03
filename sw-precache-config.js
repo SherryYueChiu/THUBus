@@ -4,12 +4,11 @@ module.exports = {
         './img/**.*',
         './js/**.js',
         './css/**.css',
-        './index.html',
-        './*.ttf'
+        './index.html'
     ],
     runtimeCaching: [{
         urlPattern: /.*/,
-        handler: 'networkFirst'
+        handler: 'fastest'
     }],
     swFile: 'service-worker.js'
 };
