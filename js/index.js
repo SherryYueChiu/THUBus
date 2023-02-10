@@ -18,10 +18,14 @@ $(function () {
     const curTime = new Date();
     const curTimeHHMM = `${curTime.getHours()}:${pad(curTime.getMinutes(), 2)}`;
     $("#clock").html(curTimeHHMM.toString());
-    //追蹤前十分鐘到現在的發車
+    // 追蹤前十分鐘到現在的發車
     const recentBusTime = busTimeTable.find(function (o) {
       return new Date(o).getTime() >= curTime.getTime() - 10 * 60000;
     });
+    if (!recentBusTime) {
+      console.warn('末班已過');
+      return;
+    }
     const nextBusTime = busTimeTable.find(function (o) {
       return new Date(o).getTime() > recentBusTime.getTime();
     });
@@ -31,53 +35,53 @@ $(function () {
       let html = "";
       let timeOffset = 0;
       if (stopName.indexOf("科技大樓（ST）") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 0;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 8 * 60000;
       } else if (stopName.indexOf("語文館（Lan）") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 1 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 7 * 60000;
       } else if (stopName.indexOf("教堂") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 1 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 7 * 60000;
       } else if (stopName.indexOf("女紙宿舍（一校）") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 3 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 5 * 60000;
       } else if (stopName.indexOf("男紙宿舍15棟") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 3 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 5 * 60000;
       } else if (stopName.indexOf("乳品小棧") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 4 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 4 * 60000;
       } else if (stopName.indexOf("亞特蘭提斯城") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 6 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 2 * 60000;
       } else if (stopName.indexOf("娚紙宿舍（二校）") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 7 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 1 * 60000;
       } else if (stopName.indexOf("管院（M）") != -1) {
-        if (selectRoute == "1" || selectRoute == "4")
+        if (selectRoute == "7")
           timeOffset = 8 * 60000;
-        else if (selectRoute == "2" || selectRoute == "3")
+        else if (selectRoute == "8")
           timeOffset = 0;
       }
       // 假日路線（往二校）
-      if (selectRoute == "4") {
+      if (selectRoute == "7") {
         timeOffset -= 60000;
       }
       if (recentBusTime.getTime() + timeOffset >= curTime.getTime() - 1 * 60000) {
@@ -114,23 +118,23 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
    * @returns {string} 轉譯後的站名
    */
   function getStopName(stopName) {
-    if (stopName.indexOf("科技大樓") != -1) {
+    if (stopName.includes("科技大樓")) {
       return "科技大樓（ST）";
-    } else if (stopName.indexOf("語文館北側") != -1) {
+    } else if (stopName.includes("語文館北側")) {
       return "語文館（Lan）";
-    } else if (stopName.indexOf("教堂") != -1) {
+    } else if (stopName.includes("教堂")) {
       return "教堂";
-    } else if (stopName.indexOf("陽光草坪") != -1) {
+    } else if (stopName.includes("陽光草坪")) {
       return "女紙宿舍（一校）";
-    } else if (stopName.indexOf("男舍15棟") != -1) {
+    } else if (stopName.includes("男舍15棟")) {
       return "男紙宿舍15棟";
-    } else if (stopName.indexOf("乳品小棧") != -1) {
+    } else if (stopName.includes("乳品小棧")) {
       return "乳品小棧";
-    } else if (stopName.indexOf("東海湖") != -1) {
+    } else if (stopName.includes("東海湖")) {
       return "亞特蘭提斯城";
-    } else if (stopName.indexOf("第二教學區學生宿舍") != -1) {
+    } else if (stopName.includes("第二教學區") || stopName.includes("第二教學區學生宿舍")) {
       return "娚紙宿舍（二校）";
-    } else if (stopName.indexOf("管院") != -1) {
+    } else if (stopName.includes("管院") || stopName.includes("管理學院")) {
       return "管院（M）";
     }
     return "？";
@@ -147,14 +151,14 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
       if (data.indexOf("不行駛") == -1) {
         $("#busRoute").html(data);
         // 讀出時間表
-        $("#busRoute>div:first>table td").each(function () {
+        $("#busRoute table td").each(function () {
           const timeHHMM = $(this).html().split(":");
           const dt = new Date();
           const time = new Date(`${dt.getFullYear()}/${dt.getMonth() + 1}/${dt.getDate()} ${timeHHMM[0]}:${timeHHMM[1]}:00`);
           busTimeTable.push(time);
         });
         // 讀出時間表
-        $("#busRoute>div:last>div>div").each(function () {
+        $("#busRoute .h5ui-timeline>div").each(function () {
           busStopTable.push($(this).html());
         });
         let html = "";
