@@ -35,49 +35,49 @@ $(function () {
       let html = "";
       let timeOffset = 0;
       if (stopName.indexOf("科技大樓（ST）") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 0;
-        else if (selectRoute == "8")
+        else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 8 * 60000;
       } else if (stopName.indexOf("語文館（Lan）") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 1 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 7 * 60000;
       } else if (stopName.indexOf("教堂") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 1 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 7 * 60000;
       } else if (stopName.indexOf("女紙宿舍（一校）") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 3 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 5 * 60000;
       } else if (stopName.indexOf("男紙宿舍15棟") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 3 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 5 * 60000;
       } else if (stopName.indexOf("乳品小棧") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 4 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 4 * 60000;
       } else if (stopName.indexOf("亞特蘭提斯城") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 6 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 2 * 60000;
       } else if (stopName.indexOf("娚紙宿舍（二校）") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 7 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 1 * 60000;
       } else if (stopName.indexOf("管院（M）") != -1) {
-        if (selectRoute == "7")
+        if (selectRoute == "1" || selectRoute == "4")
           timeOffset = 8 * 60000;
-        else if (selectRoute == "8")
+          else if (selectRoute == "2" || selectRoute == "3")
           timeOffset = 0;
       }
       // 假日路線（往二校）
