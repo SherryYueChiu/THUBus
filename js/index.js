@@ -10,6 +10,43 @@ function pad(n, width, z = '0') {
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
+let busStopTable_backup = [
+  [
+    '科技大樓',
+    '語文館北側',
+    '女舍陽光草坪',
+    '綠之心(乳品小棧)',
+    '農牧場東海湖',
+    '第二教學區學生宿舍',
+    '管院學院',
+  ],
+  [
+    '管院學院',
+    '第二教學區學生宿舍',
+    '農牧場東海湖',
+    '綠之心(乳品小棧)',
+    '男舍15棟',
+    '語文館北側',
+    '科技大樓',
+  ],
+  [
+    '管院學院',
+    '第二教學區學生宿舍',
+    '農牧場東海湖',
+    '綠之心(乳品小棧)',
+    '男舍15棟',
+    '教堂',
+  ],
+  [
+    '教堂',
+    '女舍陽光草坪',
+    '綠之心(乳品小棧)',
+    '農牧場東海湖',
+    '第二教學區學生宿舍',
+    '管院學院',
+  ],
+];
+
 $(function () {
   /**
    * 公車到站時間推估
@@ -146,7 +183,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
    */
   function showRoute(route) {
     selectRoute = route;
-    const lineBotUrl = `https://linebot.cc.paas.ithu.tw/v6/pages/cc_util_busroute_server.php?routeid=${route}`;
+    const lineBotUrl = `https://busservice.cc.paas.ithu.tw/timetable/${route}/zh_TW`;
     const serverQueryUrl = `https://ziting.hostingerapp.com/readPage.php?URL=${lineBotUrl}`;
     $.get(serverQueryUrl, function (data) {
       if (data.includes("不行駛")) {
@@ -164,20 +201,21 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
           }
         }, 800);
       } else {
-        $("#busRoute").html(data);
+        $("#busRoute").html($(data).find('table'));
         // 讀出時間表
-        $("#busRoute table td").each(function () {
-          const timeHHMM = $(this).html().split(":");
-          const dt = new Date();
-          const time = new Date(`${dt.getFullYear()}/${dt.getMonth() + 1}/${dt.getDate()} ${timeHHMM[0]}:${timeHHMM[1]}:00`);
-          busTimeTable.push(time);
-        });
-        // 讀出時間表
-        $("#busRoute .h5ui-timeline>div").each(function () {
-          busStopTable.push($(this).html());
-        });
+        busTimeTable = [];
+        $('table').find('td').each(function () {
+          let text = $(this).text().match(/\d{2}:\d{2}/);
+          if (text) {
+            let [HH, mm] = text.match(/\d{2}/g);
+            const time = new Date(`${dt.getFullYear()}/${dt.getMonth() + 1}/${dt.getDate()} ${HH}:${mm}:00`);
+            busTimeTable.push(text);
+          }
+        })
+        busTimeTable = busTimeTable.sort((a, b) => a > b);
+        // 讀出站點表
         let html = "";
-        busStopTable.forEach(function (originalStopName) {
+        busStopTable_backup[route - 1].forEach(function (originalStopName) {
           if (originalStopNameo) {
             const stopName = getStopName(originalStopName);
             html += `
