@@ -4,6 +4,10 @@ var busTimeTable = [],
 var popTextTimer, popTextTimes = 50;
 var serverAddr = "sherryyue2.azurewebsites.net/THUBus/";
 var curTime, selectRoute, recentBusTime, nextBusTime;
+var busTrackTimer;
+var queryResult = {
+  failed: null,
+}
 
 function pad(n, width, z = '0') {
   n = n + '';
@@ -59,7 +63,13 @@ $(function () {
     const recentBusTime = busTimeTable.find(function (o) {
       return new Date(o).getTime() >= curTime.getTime() - 10 * 60000;
     });
-    if (!recentBusTime) {
+    if (queryResult.failed !== false) {
+      console.warn('API抓取失敗');
+      clearInterval(busTrackTimer);
+      const lineBotUrl = `https://busservice.cc.paas.ithu.tw/timetable/${selectRoute}/zh_TW`;
+      $('.errorHint>a').attr('href', lineBotUrl);
+      $('.errorHint').show();
+    } else if (!recentBusTime) {
       console.warn('末班已過');
       return;
     }
@@ -200,6 +210,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
             clearInterval(popTextTimer);
           }
         }, 800);
+        queryResult.failed = false;
       } else {
         $("#busRoute").html($(data).find('table'));
         // 讀出時間表
@@ -213,6 +224,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
           }
         })
         busTimeTable = busTimeTable.sort((a, b) => a > b);
+        queryResult.failed = false;
         // 讀出站點表
         let html = "";
         busStopTable_backup[route - 1].forEach(function (originalStopName) {
@@ -228,7 +240,6 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
         $("#busTimeline").addClass("main-timeline").append(html);
       }
     });
-
   }
 
   // 送出
@@ -247,7 +258,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
         "top": "100vh"
       }, 1500);
     }, 3000);
-    setInterval(function () {
+    busTrackTimer = setInterval(function () {
       // 公車動態更新
       busTrackUpdate();
     }, 5000);
