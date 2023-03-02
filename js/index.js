@@ -217,7 +217,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
         busTimeTable = [];
         $('table').find('td').each(function () {
           let text = $(this).text().match(/\d{2}:\d{2}/);
-          if (text[0]) {
+          if (text?.[0]) {
             let [HH, mm] = text[0].match(/\d{2}/g);
             const time = new Date(`${dt.getFullYear()}/${dt.getMonth() + 1}/${dt.getDate()} ${HH}:${mm}:00`);
             busTimeTable.push(text);
