@@ -193,7 +193,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
   function showRoute(route) {
     selectRoute = route;
     const lineBotUrl = `https://busservice.cc.paas.ithu.tw/timetable/${route}/zh_TW`;
-    const serverQueryUrl = `https://ziting.hostingerapp.com/readPage.php?URL=${lineBotUrl}`;
+    const serverQueryUrl = `https://us-central1-utilservice-296f2.cloudfunctions.net/readPage?URL=${lineBotUrl}`;
     $.get(serverQueryUrl, function (data) {
       if (data.includes("不行駛")) {
         // 本路線今日停駛
