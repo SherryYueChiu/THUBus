@@ -2,7 +2,6 @@
 var busTimeTable = [],
   busStopTable = [];
 var popTextTimer, popTextTimes = 50;
-var serverAddr = "sherryyue2.azurewebsites.net/THUBus/";
 var curTime, selectRoute, recentBusTime, nextBusTime;
 var busTrackTimer;
 var queryResult = {
@@ -219,16 +218,17 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
           let text = $(this).text().match(/\d{2}:\d{2}/);
           if (text?.[0]) {
             let [HH, mm] = text[0].match(/\d{2}/g);
-            const time = new Date(`${dt.getFullYear()}/${dt.getMonth() + 1}/${dt.getDate()} ${HH}:${mm}:00`);
-            busTimeTable.push(text);
+            const curTime = new Date();
+            const time = new Date(`${curTime.getFullYear()}/${curTime.getMonth() + 1}/${curTime.getDate()} ${HH}:${mm}:00`);
+            busTimeTable.push(time);
           }
         })
-        busTimeTable = busTimeTable.sort((a, b) => a > b);
+        busTimeTable = busTimeTable.sort((a, b) => a.valueOf() > b.valueOf());
         queryResult.failed = false;
         // 讀出站點表
         let html = "";
         busStopTable_backup[route - 1].forEach(function (originalStopName) {
-          if (originalStopNameo) {
+          if (originalStopName) {
             const stopName = getStopName(originalStopName);
             html += `
 <div stopid="${stopName}" class="tag busStop bg-white p-4 mt-5 mb-5 rounded-lg mx-auto shadow-lg w-75">
