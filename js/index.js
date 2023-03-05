@@ -195,7 +195,7 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
     const lineBotUrl = `https://busservice.cc.paas.ithu.tw/timetable/${route}/zh_TW`;
     const serverQueryUrl = `https://us-central1-utilservice-296f2.cloudfunctions.net/readPage?URL=${lineBotUrl}`;
     $.get(serverQueryUrl, function (data) {
-      if (data.includes("不行駛")) {
+      if (data.includes("不行駛") || data.includes("無公車")) {
         // 本路線今日停駛
         popTextTimer = setInterval(function () {
           popTextTimes--;
@@ -238,8 +238,19 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
           }
         });
         $("#busTimeline").addClass("main-timeline").append(html);
+        busTrackUpdate();
+        busTrackTimer = setInterval(function () {
+          // 公車動態更新
+          busTrackUpdate();
+        }, 5000);
       }
-    });
+    }).fail(function () {
+      busTrackUpdate();
+      busTrackTimer = setInterval(function () {
+        // 公車動態更新
+        busTrackUpdate();
+      }, 5000);
+    })
   }
 
   // 送出
@@ -258,10 +269,6 @@ ${pad(time2.getHours(), 2)}:${pad(time2.getMinutes(), 2)}
         "top": "100vh"
       }, 1500);
     }, 3000);
-    busTrackTimer = setInterval(function () {
-      // 公車動態更新
-      busTrackUpdate();
-    }, 5000);
   }
 
   init();
