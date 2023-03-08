@@ -54,13 +54,11 @@
 <body>
     <div id="busRoute" style="display: none;"></div>
     <div id="app">
+        <!-- 背景圖 -->
         <img src="./images/machi1.png" id="bgImg1" />
         <img src="./images/pusheen1.png" id="bgImg2" />
-        <button class="floatingBtn" data-toggle="collapse" data-target="#collapse"
-            onclick="javascript:window.open('https://hackmd.io/@sherryyue/ByUr2wkBD')">🛸</button>
 
-        <button class="btn-reinit" onclick="javascript:history.go(0)">🔙</button>
-
+        <!-- 第一頁 -->
         <div id="page1" class="w-100 h-100 page" align="center">
             <div class="tag bg-white p-4 mt-5 rounded-lg mx-auto shadow-lg w-75">
                 <h3 class="color1">你來啦？</h3>
@@ -101,10 +99,19 @@
                 </div>
             </div>
         </div>
+
+        <!-- 背景動畫 -->
         <div class="scannerImg"></div>
+
+        <!-- 懸浮footer -->
         <div align="center" id="footer" class="m-3 mb-4">
             <span class="badge badge-pill badge-light p-2 pl-3 pr-3">玥餅 / THU 111-2</span>
         </div>
+
+        <!-- 功能鍵 -->
+        <button class="floatingBtn" data-toggle="collapse" data-target="#collapse"
+        onclick="javascript:window.open('https://hackmd.io/@sherryyue/ByUr2wkBD')">🛸</button>
+        <button class="btn-reinit" onclick="javascript:history.go(0)">◀</button>
     </div>
     <div class="modal" id="shops">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
